@@ -22,6 +22,14 @@ public class NickManager {
         return repository.isPlayerInDatabase(player.getUniqueId());
     }
 
+    public void registerPlayer(Player player) {
+        UUID playerUUID = player.getUniqueId();
+
+        if (!repository.isPlayerInDatabase(playerUUID)) {
+            repository.savePlayer(playerUUID, null); // Registra o jogador com nickFake como null
+        }
+    }
+
     // Obtém ou cria as informações de nick de um jogador
     public PlayerNick getOrCreateNick(Player player) {
         UUID playerUUID = player.getUniqueId();
@@ -40,11 +48,9 @@ public class NickManager {
         return playerNick;
     }
 
-    // Aplica o nick fake e salva no banco de dados e cache
+    // Define o nick fake e persiste no banco e cache
     public void applyNickFake(Player player, String nickFake) {
-        UUID playerUUID = player.getUniqueId();
-        repository.savePlayer(playerUUID, nickFake);
-
+        repository.savePlayer(player.getUniqueId(), nickFake);
         PlayerNick playerNick = new PlayerNick(player.getName(), nickFake);
         cache.setNick(player, playerNick);
     }

@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -97,7 +98,17 @@ public final class PulseNick extends JavaPlugin {
         long startTime = System.currentTimeMillis();
         getLogger().info("Conectando ao banco de dados...");
 
-        connection = DriverManager.getConnection("jdbc:sqlite:plugins/PulseNick/storage.db");
+        // Obtém o caminho do diretório de Addons do BedWars2023 e cria o diretório PulseNick se não existir
+        File addonPath = new File(bw2023Api.getAddonsPath().getPath() + File.separator + "PulseNick");
+        if (!addonPath.exists()) {
+            addonPath.mkdirs();
+        }
+
+        // Define o caminho completo do banco de dados
+        File databaseFile = new File(addonPath, "storage.db");
+
+        // Conecta ao banco de dados SQLite
+        connection = DriverManager.getConnection("jdbc:sqlite:" + databaseFile.getPath());
         nickRepository = new NickRepository(connection);
         nickRepository.createTables();
 

@@ -32,7 +32,6 @@ public class NickRepository {
     // Verifica se o jogador está presente na base de dados
     public boolean isPlayerInDatabase(UUID playerUUID) {
         String sql = "SELECT 1 FROM players WHERE uuid = ?";
-
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, playerUUID.toString());
             ResultSet rs = stmt.executeQuery();
