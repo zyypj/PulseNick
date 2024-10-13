@@ -1,8 +1,0 @@
-Util - PRONTO
-Config - PRONTO
-Storage - PRONTO
-NickManager - PRONTO
-NickListener
-NickList
-NickCommand
-NickMenu
