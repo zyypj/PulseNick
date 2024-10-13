@@ -16,9 +16,13 @@ public class MessagesData {
             switch (l.getIso()) {
                 case "pt":
                     yml.addDefault(NO_PERM, "&cVocê não tem permissão para isso!");
+                    yml.addDefault(NICK_CHANGE, "&aSeu nick foi alterado para {NAME}!");
+                    yml.addDefault(NICK_RESET, "&aSeu nick foi resetado");
                     break;
                 default:
                     yml.addDefault(NO_PERM, "&cYou don't have permission for that!");
+                    yml.addDefault(NICK_CHANGE, "&aHis nick was changed to {NAME}!");
+                    yml.addDefault(NICK_RESET, "&aYour nick has been reset");
                     break;
             }
         }

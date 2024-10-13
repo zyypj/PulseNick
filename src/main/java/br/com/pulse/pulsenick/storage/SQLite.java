@@ -11,9 +11,26 @@ public class SQLite {
     private final String databasePath;
     private Connection connection;
 
+    /**
+     * Estrutura da tabela players:
+     * <p>
+     * - uuid: TEXT, chave primária que identifica cada jogador de forma única.
+     * - nickFake: TEXT, armazena o apelido falso do jogador (pode ser null se o jogador não estiver usando um apelido).
+     * - nickReal: TEXT, armazena o nome real do jogador.
+     * <p>
+     * A tabela serve para associar um UUID (identificador único do jogador) ao seu apelido falso e nome real, caso eles existam.
+     * <p>
+     * The 'players' table structure:
+     * <p>
+     * - uuid: TEXT, primary key that uniquely identifies each player.
+     * - nickFake: TEXT, stores the player's fake nickname (can be null if not using a nickname).
+     * - nickReal: TEXT, stores the player's real name.
+     */
+
+
     public SQLite() {
         BedWars bw2023Api = Bukkit.getServicesManager().getRegistration(BedWars.class).getProvider();
-        this.databasePath = "jdbc:sqlite:" + bw2023Api.getAddonsPath().getPath() + File.separator + "PulseNick";
+        this.databasePath = "jdbc:sqlite:" + bw2023Api.getAddonsPath().getPath() + File.separator + "PulseNick" + File.separator + "storage.db";
     }
 
     // Método para conectar ao banco de dados
@@ -92,6 +109,30 @@ public class SQLite {
         } catch (SQLException e) {
             logError("Error resetting player " + playerUUID, e);
         }
+    }
+
+    /**
+     * Verifica se o jogador está presente no banco de dados
+     * Checks if the player is present in the database
+     *
+     * @param playerUUID O UUID do jogador
+     *                  The player's UUID
+     * @return True se o jogador estiver no banco, False se não estiver
+     *         True if the player is in the database, False otherwise
+     */
+    public boolean isPlayerInDatabase(String playerUUID) {
+        String sql = "SELECT 1 FROM players WHERE uuid = ?;";
+        boolean exists = false;
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, playerUUID);
+            ResultSet rs = pstmt.executeQuery();
+            exists = rs.next();
+        } catch (SQLException e) {
+            logError("Error checking if player exists in database: " + playerUUID, e);
+        }
+
+        return exists;
     }
 
     /**
