@@ -1,0 +1,4 @@
+name: PulseNick
+version: '${project.version}'
+main: br.com.pulse.pulsenick.PulseNick
+depend: [BedWars2023, PlaceholderAPI]
