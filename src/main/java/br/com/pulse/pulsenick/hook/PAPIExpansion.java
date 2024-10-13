@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class PlaceholderAPI extends PlaceholderExpansion {
+public class PAPIExpansion extends PlaceholderExpansion {
 
     private final DisguiseProvider provider = DisguiseManager.getProvider();
 
@@ -32,6 +32,11 @@ public class PlaceholderAPI extends PlaceholderExpansion {
         if (player == null) {
             return "";
         }
+
+        /*
+         * 
+         *
+         */
 
         String request = params.toLowerCase();
         PlayerInfo info = provider.getInfo(player);

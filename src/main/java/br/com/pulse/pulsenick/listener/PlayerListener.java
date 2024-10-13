@@ -1,7 +1,6 @@
 package br.com.pulse.pulsenick.listener;
 
 import br.com.pulse.pulsenick.manager.NickManager;
-import dev.iiahmed.disguise.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,46 +10,35 @@ import org.bukkit.event.player.PlayerQuitEvent;
 public class PlayerListener implements Listener {
 
     private final NickManager nickManager;
-    private final DisguiseProvider disguiseProvider;
 
     public PlayerListener(NickManager nickManager) {
         this.nickManager = nickManager;
-        this.disguiseProvider = DisguiseManager.getProvider();
     }
 
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent e) {
-        Player player = e.getPlayer();
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
 
-        // Verifica se o jogador está no banco de dados
+        // Verifica se o jogador está na database, se não, registra
         if (!nickManager.isPlayerInDatabase(player)) {
-            // Salva o jogador no banco de dados com nickFake como null e nickReal como o nome atual
-            nickManager.applyNickReal(player, player.getName());
-            nickManager.applyNickFake(player, null);  // nickFake como null
+            nickManager.resetNickReal(player); // Inicializa com o nome real
         }
 
-        // Verifica se o jogador tinha um nickFake salvo
-        String nickFake = nickManager.getNickFake(player);
-
-        if (nickFake != null && !nickFake.isEmpty()) {
-            // Aplica o nickFake ao jogador
-            Disguise disguise = Disguise.builder()
-                    .setName(nickFake)
-                    .setSkin(player.getUniqueId()) // Usa o UUID diretamente
-                    .build();
-            disguiseProvider.disguise(player, disguise);
+        // Carrega o nick do jogador, aplica o fake se existir
+        if (nickManager.hasNickFake(player)) {
+            nickManager.applyNickFake(player, nickManager.getNickFake(player));
         }
     }
 
     @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent e) {
-        Player player = e.getPlayer();
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
 
-        // Obtém as informações do jogador disfarçado
-        PlayerInfo info = disguiseProvider.getInfo(player);
-
-        if (info.hasName()) {
-            nickManager.applyNickFake(player, info.getNickname());
+        // Verifica se o jogador está usando um nick fake e salva no banco de dados
+        if (nickManager.hasNickFake(player)) {
+            nickManager.applyNickFake(player, nickManager.getNickFake(player));
+        } else {
+            nickManager.resetNickReal(player);
         }
     }
 }

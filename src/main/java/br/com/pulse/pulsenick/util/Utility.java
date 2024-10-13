@@ -12,30 +12,34 @@ import java.util.stream.Collectors;
 
 public class Utility {
 
-    static BedWars bwAPI = Bukkit.getServicesManager().getRegistration(BedWars.class).getProvider();
+    private final BedWars bwAPI;
 
-    public static void info(String text) {
-        Bukkit.getConsoleSender().sendMessage("[" + PulseNick.getInstance().getName() + "] " + c(text));
+    public Utility(BedWars bwAPI) {
+        this.bwAPI = bwAPI;
     }
 
-    public static void warn(String text) {
+    public void info(String text) {
+        Bukkit.getConsoleSender().sendMessage("[" + "PulseNick" + "] " + c(text));
+    }
+
+    public void warn(String text) {
         PulseNick.getInstance().getLogger().warning(c(text));
     }
 
-    public static String c(String text) {
+    public String c(String text) {
         return ChatColor.translateAlternateColorCodes('&', text);
     }
 
-    public static String p(Player player, String text) {
+    public String p(Player player, String text) {
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) return c(text);
         return c(PlaceholderAPI.setPlaceholders(player, text));
     }
 
-    public static String getMsg(Player player, String path) {
+    public String getMsg(Player player, String path) {
         return p(player, bwAPI.getPlayerLanguage(player).getString(path));
     }
 
-    public static List<String> getListMsg(Player player, String path) {
+    public List<String> getListMsg(Player player, String path) {
         return bwAPI.getPlayerLanguage(player).getList(path).stream().map(s -> p(player, s)).collect(Collectors.toList());
     }
 }
