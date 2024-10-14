@@ -55,10 +55,10 @@ public final class PulseNick extends JavaPlugin {
 
     /**
      * Método chamado quando o plugin é habilitado.
-     * Método responsável por carregar suporte, conectar ao banco de dados e registrar comandos e eventos.
+     * Método responsável por carregar suporte, conectar ao banco de dados, iniciar configurações, e registrar comandos e eventos.
      * <p>
      * Method called when the plugin is enabled.
-     * Responsible for loading support, connecting to the database, and registering commands and events.
+     * Responsible for loading support, connecting to the database, start configs, and registering commands and events.
      */
     @Override
     public void onEnable() {
