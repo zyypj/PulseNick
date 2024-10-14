@@ -1,17 +1,18 @@
 package br.com.pulse.pulsenick.cache;
 
+import br.com.pulse.pulsenick.PulseNick;
 import br.com.pulse.pulsenick.model.PlayerNick;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class NickCache {
 
     // Armazena o nick real e fake dos jogadores em memória
     // Stores the real and fake nicknames of players in memory
-    private final Map<UUID, PlayerNick> nickCache = new HashMap<>();
+    private final Map<UUID, PlayerNick> nickCache = new ConcurrentHashMap<>();
 
     // Retorna as informações de nick de um jogador a partir do cache
     // Retrieves the player's nick information from the cache
@@ -22,8 +23,13 @@ public class NickCache {
     // Salva ou atualiza as informações de nick de um jogador no cache
     // Saves or updates the player's nick information in the cache
     public void setNick(Player player, PlayerNick playerNick) {
+        if (player == null || playerNick == null) {
+            PulseNick.getInstance().getLogger().warning("Tried to cache a null player or nickname!");
+            return;
+        }
         nickCache.put(player.getUniqueId(), playerNick);
     }
+
 
     // Remove as informações de nick de um jogador do cache
     // Removes the player's nick information from the cache
