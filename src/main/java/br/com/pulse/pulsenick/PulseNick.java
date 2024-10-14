@@ -5,11 +5,13 @@ import br.com.pulse.pulsenick.command.NickCommand;
 import br.com.pulse.pulsenick.config.MainConfig;
 import br.com.pulse.pulsenick.config.MessagesData;
 import br.com.pulse.pulsenick.database.NickRepository;
+import br.com.pulse.pulsenick.hook.PAPIExpansion;
 import br.com.pulse.pulsenick.listener.PlayerListener;
 import br.com.pulse.pulsenick.manager.NickManager;
 import br.com.pulse.pulsenick.util.Utility;
 import com.tomkeuper.bedwars.api.BedWars;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -41,16 +43,6 @@ public final class PulseNick extends JavaPlugin {
      */
     public static PulseNick getInstance() {
         return InstanceHolder.INSTANCE;
-    }
-
-    /**
-     * Construtor privado para evitar múltiplas instâncias.
-     * Private constructor to avoid multiple instances.
-     */
-    private PulseNick() {
-        if (InstanceHolder.INSTANCE != null) {
-            throw new IllegalStateException("Already instantiated");
-        }
     }
 
     /**
@@ -87,6 +79,10 @@ public final class PulseNick extends JavaPlugin {
             // Register events and commands
             registerListeners();
             registerCommands();
+
+            // Registrar placeholders
+            // Register placeholders
+            registerPlaceholders();
 
         } catch (Exception e) {
             // Em caso de qualquer falha, desabilitar o plugin e logar o erro
@@ -217,5 +213,19 @@ public final class PulseNick extends JavaPlugin {
 
         long endTime = System.currentTimeMillis();
         getLogger().info("Commands registered in " + (endTime - startTime) + "ms");
+    }
+    /**
+     * Registra a expansão do PlaceholderAPI se o plugin estiver presente.
+     * <p>
+     * Registers the PlaceholderAPI expansion if the plugin is present.
+     */
+    private void registerPlaceholders() {
+        Plugin papi = Bukkit.getPluginManager().getPlugin("PlaceholderAPI");
+        if (papi != null) {
+            new PAPIExpansion(nickCache, nickRepository).register();
+            getLogger().info("PlaceholderAPI expansion registered.");
+        } else {
+            getLogger().warning("PlaceholderAPI not found. Expansion not registered.");
+        }
     }
 }

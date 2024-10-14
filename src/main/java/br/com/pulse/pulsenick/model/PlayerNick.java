@@ -2,26 +2,26 @@ package br.com.pulse.pulsenick.model;
 
 public class PlayerNick {
 
-    private final String nickReal;
-    private final String nickFake;
+    private final String realNick;
+    private final String fakeNick;
 
-    public PlayerNick(String nickReal, String nickFake) {
-        this.nickReal = nickReal;
-        this.nickFake = nickFake;
+    public PlayerNick(String realNick, String fakeNick) {
+        this.realNick = realNick;
+        this.fakeNick = fakeNick;
     }
 
     // Verifica se o jogador tem um nick fake
-    public boolean hasNickFake() {
-        return nickFake != null;
+    public boolean hasFakeNick() {
+        return fakeNick != null;
     }
 
     // Retorna o nick fake
-    public String getNickFake() {
-        return nickFake;
+    public String getFakeNick() {
+        return fakeNick;
     }
 
     // Retorna o nick real
-    public String getNickReal() {
-        return nickReal;
+    public String getRealNick() {
+        return realNick;
     }
 }

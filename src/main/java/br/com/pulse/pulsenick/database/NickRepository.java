@@ -1,5 +1,7 @@
 package br.com.pulse.pulsenick.database;
 
+import br.com.pulse.pulsenick.model.PlayerNick;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -120,6 +122,37 @@ public class NickRepository {
             }
         } catch (SQLException e) {
             throw new RuntimeException("Error retrieving fake nickname", e);
+        }
+        return null;
+    }
+
+    /**
+     * Recupera as informações de nick de um jogador a partir do banco de dados, com base no UUID fornecido.
+     * Retorna um objeto PlayerNick contendo o nome real e o apelido falso do jogador.
+     * Caso o jogador não seja encontrado, retorna null.
+     * <p>
+     * Retrieves the player's nick information from the database based on the provided UUID.
+     * Returns a PlayerNick object containing the real name and the player's fake nickname.
+     * If the player is not found, returns null.
+     *
+     * @param playerUUID UUID do jogador a ser buscado.
+     *                   The UUID of the player to retrieve.
+     * @return Um objeto PlayerNick com o nome real e apelido falso, ou null se não encontrado.
+     *         A PlayerNick object with real name and fake nickname, or null if not found.
+     */
+    public PlayerNick getPlayerNick(UUID playerUUID) {
+        String sql = "SELECT nickReal, nickFake FROM players WHERE uuid = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, playerUUID.toString());
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                String realNick = rs.getString("nickReal");
+                String fakeNick = rs.getString("nickFake");
+                return new PlayerNick(realNick, fakeNick);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error retrieving player nick", e);
         }
         return null;
     }
