@@ -71,9 +71,9 @@ public class PAPIExpansion extends PlaceholderExpansion {
 
         String request = params.toLowerCase();
         return switch (request) {
-            case "name" -> playerNick.getFakeNick() != null ? playerNick.getFakeNick() : playerNick.getRealNick();
+            case "name" -> playerNick.hasFakeNick() ? playerNick.getFakeNick() : playerNick.getRealNick();
             case "realname" -> playerNick.getRealNick();
-            case "is_nicked" -> String.valueOf(playerNick.getFakeNick() != null);
+            case "is_nicked" -> String.valueOf(playerNick.hasFakeNick());
             default -> null;
         };
     }

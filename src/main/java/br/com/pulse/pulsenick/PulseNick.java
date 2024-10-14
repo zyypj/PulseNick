@@ -56,12 +56,12 @@ public final class PulseNick extends JavaPlugin {
     public void onEnable() {
         long startTime = System.currentTimeMillis();
 
-        try {
-            // Carrega o suporte necessário e inicializa dependências
-            // Loads necessary support and initializes dependencies
-            loadSupport();
-            utility = new Utility(bw2023Api);
+        // Carrega o suporte necessário e inicializa dependências
+        // Loads necessary support and initializes dependencies
+        loadDependencies();
+        utility = new Utility(bw2023Api);
 
+        try {
             // Conectar ao banco de dados
             // Connect to the database
             connectDatabase();
@@ -129,17 +129,17 @@ public final class PulseNick extends JavaPlugin {
      * Loads the necessary support for the BedWars2023 plugin.
      * Checks if the plugin is present and enables support.
      */
-    private void loadSupport() {
+    private void loadDependencies() {
         PluginManager pm = Bukkit.getPluginManager();
 
         if (pm.getPlugin("BedWars2023") == null) {
-            utility.warn("&cBedWars2023 not found. Disabling plugin.");
+            getLogger().warning("&cBedWars2023 not found. Disabling plugin.");
             getPluginLoader().disablePlugin(this);
             return;
         }
 
         bw2023Api = Bukkit.getServicesManager().getRegistration(BedWars.class).getProvider();
-        utility.info("&aSupport for BedWars2023 enabled.");
+        getLogger().info("§aSupport for BedWars2023 enabled.");
     }
 
     /**
@@ -151,7 +151,7 @@ public final class PulseNick extends JavaPlugin {
      */
     private void connectDatabase() {
         long startTime = System.currentTimeMillis();
-        utility.info("&aConnecting to the database...");
+        utility.info("&eConnecting to the database...");
 
         try {
             File addonPath = new File(bw2023Api.getAddonsPath().getPath() + File.separator + "PulseNick");
@@ -193,7 +193,7 @@ public final class PulseNick extends JavaPlugin {
      */
     private void registerListeners() {
         long startTime = System.currentTimeMillis();
-        utility.info("&aRegistering listeners...");
+        utility.info("&eRegistering listeners...");
 
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new PlayerListener(nickManager), this);
@@ -209,7 +209,7 @@ public final class PulseNick extends JavaPlugin {
      */
     private void registerCommands() {
         long startTime = System.currentTimeMillis();
-        utility.info("&aRegistering commands...");
+        utility.info("&eRegistering commands...");
 
         getCommand("nick").setExecutor(new NickCommand(nickManager, utility));
 
