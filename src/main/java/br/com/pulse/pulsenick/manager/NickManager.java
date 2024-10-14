@@ -65,12 +65,12 @@ public class NickManager {
     // Verifica se o jogador tem um nick fake
     public boolean hasNickFake(Player player) {
         PlayerNick playerNick = getOrCreateNick(player);
-        return playerNick.getNickFake() != null;
+        return playerNick.getFakeNick() != null;
     }
 
     // Obtém o nick fake do jogador
     public String getNickFake(Player player) {
         PlayerNick playerNick = getOrCreateNick(player);
-        return playerNick.getNickFake();
+        return playerNick.getFakeNick();
     }
 }

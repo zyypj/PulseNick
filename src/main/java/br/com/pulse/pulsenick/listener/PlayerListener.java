@@ -29,12 +29,12 @@ public class PlayerListener implements Listener {
         PlayerNick playerNick = nickManager.getOrCreateNick(player);
 
         // Verifica se o jogador usava um nick fake ao sair
-        if (playerNick.hasNickFake()) {
-            nickManager.applyNickFake(player, playerNick.getNickFake());
+        if (playerNick.hasFakeNick()) {
+            nickManager.applyNickFake(player, playerNick.getFakeNick());
         }
 
         // Verifica se o nome real foi alterado
-        if (!playerNick.getNickReal().equals(player.getName())) {
+        if (!playerNick.getRealNick().equals(player.getName())) {
             nickManager.resetNickReal(player);
         }
     }
